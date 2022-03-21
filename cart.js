@@ -1,4 +1,4 @@
-const cartID = Number(localStorage.getItem('cartid'))
+const cartID = Number(localStorage.getItem('cartId'))
 
 if (!cartID) {
   alert('You have no products added')

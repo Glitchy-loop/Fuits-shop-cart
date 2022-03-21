@@ -2,7 +2,7 @@ let cartId = Number(localStorage.getItem('cartId'))
 
 if (!cartId) {
   cartId = Math.floor(Math.random() * 100000) + 1
-  localStorage.setItem('cartid', cartId)
+  localStorage.setItem('cartId', cartId)
 }
 
 const getData = async url => {
