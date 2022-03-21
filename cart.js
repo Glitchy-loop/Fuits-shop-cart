@@ -1,3 +1,10 @@
+const cartID = Number(localStorage.getItem('cartid'))
+
+if (!cartID) {
+  alert('You have no products added')
+  location.replace('/')
+}
+
 const getData = async url => {
   try {
     const res = await fetch(url)
@@ -18,50 +25,28 @@ const getInfo = async () => {
     'https://demo-17-vnoq3.ondigitalocean.app/products'
   )
   const cart = await getData(
-    'https://demo-17-vnoq3.ondigitalocean.app/cart/11224432145'
+    `https://demo-17-vnoq3.ondigitalocean.app/cart/${cartID}`
   )
 
   // console.log(products)
-  console.log(cart)
+  // console.log(cart)
 
-  // addItems(products)
+  // Quantity calculation
+  const mapProducts = (cart, products) => {
+    return products
+      .map(product => ({
+        ...product,
+        quantity: cart.filter(item => product.id === item).length
+      }))
+      .filter(product => product.quantity > 0)
+  }
 
-  const items = products.filter(product => {
-    for (let i in cart) {
-      if (product.id === cart[i]) {
-        return product
-      }
-    }
-  })
-
-  console.log(items)
-  addItems(items)
-  // addItems(items)
-
-  // Remove product from the cart
-  const xBtns = document.querySelectorAll('.fa-xmark')
-
-  xBtns.forEach(btn => {
-    btn.addEventListener('click', e => {
-      let clickedItem = Number(
-        e.target.parentElement.parentElement.firstChild.className
-      )
-      console.log(clickedItem)
-
-      const updatedCart = items.filter(product => {
-        if (product.id !== clickedItem) {
-          // cart = cart.pop(Number(clickedItem))
-
-          return product
-        }
-      })
-      addItems(updatedCart)
-    })
-  })
+  addItems(mapProducts(cart, products))
 }
 
 getInfo()
 
+// Add and display items in the cart table
 const addItems = async data => {
   const table = document.querySelector('tbody')
   table.innerHTML = ''
@@ -70,8 +55,23 @@ const addItems = async data => {
     const tr = table.insertRow()
 
     const td1 = tr.insertCell()
-    td1.className = item.id
-    td1.innerHTML = `<i class="fa-solid fa-xmark"></i>`
+    const deleteButton = document.createElement('button')
+    td1.append(deleteButton)
+    deleteButton.innerHTML = `<i class="fa-solid fa-xmark"></i>`
+    deleteButton.addEventListener('click', async () => {
+      const res = await fetch(
+        `https://demo-17-vnoq3.ondigitalocean.app/cart/${cartID}/${item.id}`,
+        {
+          method: 'DELETE'
+        }
+      )
+      const data = await res.json()
+
+      if (data.msg === 'OK') {
+        tr.remove()
+      }
+      console.log(data)
+    })
 
     const td2 = tr.insertCell()
     td2.innerHTML = `<img src="${item.image}"></img>`
@@ -84,10 +84,10 @@ const addItems = async data => {
     td4.textContent = '€' + item.price
 
     const td5 = tr.insertCell()
-    td5.textContent = 'quantity'
+    td5.textContent = item.quantity
 
     const td6 = tr.insertCell()
-    td6.textContent = '€' + item.price
+    td6.textContent = '€' + item.price * item.quantity
     td6.style.fontWeight = 'bold'
   })
 }

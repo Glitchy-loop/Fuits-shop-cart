@@ -161,7 +161,7 @@ table tbody i {
   font-size: 1.3rem;
 }
 
-table tbody i:hover {
+table tbody button:hover, table tbody i:hover {
   cursor: pointer;
 }
 

@@ -1,3 +1,10 @@
+let cartId = Number(localStorage.getItem('cartId'))
+
+if (!cartId) {
+  cartId = Math.floor(Math.random() * 100000) + 1
+  localStorage.setItem('cartid', cartId)
+}
+
 const getData = async url => {
   try {
     const res = await fetch(url)
@@ -48,7 +55,7 @@ const addItems = items => {
     btn.addEventListener('click', async e => {
       let fruitProductId = Number(e.target.parentElement.className.slice(16))
 
-      console.log(fruitProductId)
+      // console.log(fruitProductId)
 
       const res = await fetch('https://demo-17-vnoq3.ondigitalocean.app/cart', {
         method: 'POST',
@@ -56,7 +63,7 @@ const addItems = items => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          randomId: 11224432145,
+          randomId: cartId,
           productId: fruitProductId
         })
       })
@@ -89,5 +96,3 @@ const displayRatings = async () => {
 }
 
 displayRatings()
-
-// https://demo-17-vnoq3.ondigitalocean.app/cart/11224432145
