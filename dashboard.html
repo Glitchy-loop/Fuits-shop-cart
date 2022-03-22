@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fruits store - Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
@@ -28,8 +29,18 @@
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque,
         eaque.
       </div>
+      <button class="cart" onclick="window.location.href = './index.html'">
+        Products
+      </button>
     </header>
-    <div class="container"></div>
+    <!-- dashboard content -->
+    <div class="container">
+      <div>
+        <canvas id="myChart"></canvas>
+      </div>
+    </div>
     <!-- SCRIPT -->
+
+    <script src="./dashboard.js"></script>
   </body>
 </html>
